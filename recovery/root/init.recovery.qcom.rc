@@ -1,0 +1,17 @@
+import /init.recovery.qcom_decrypt.rc
+import /init.recovery.usb.rc
+
+on init
+    write /sys/class/backlight/panel0-backlight/brightness 200
+
+on fs
+    wait /dev/block/platform/soc/${ro.boot.bootdevice}
+    symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+
+    # Mount firmware
+    mkdir /vendor/firmware_mnt
+    mount vfat /dev/block/bootdevice/by-name/apnhlos /vendor/firmware_mnt ro
+    
+    # Mount firmware
+    mkdir /vendor/firmware-modem
+    mount vfat /dev/block/bootdevice/by-name/modem /vendor/firmware-modem ro
